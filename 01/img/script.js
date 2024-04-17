@@ -14,19 +14,19 @@ function addToCart(productId) {
     const productElement = document.querySelector(`.box[data-id="${productId}"]`);
     const productName = productElement.dataset.name;
     const productPrice = parseFloat(productElement.dataset.price);
+    const productImgUrl = productElement.querySelector('img').src;
 
     const existingItem = cart.find(item => item.id === productId);
 
     if (existingItem) {
-       
         existingItem.quantity++;
     } else {
-        
         const newItem = {
             id: productId,
             name: productName,
             price: productPrice,
-            quantity: 1
+            quantity: 1,
+            imgUrl: productImgUrl,
         };
         cart.push(newItem);
     }
@@ -36,22 +36,22 @@ function addToCart(productId) {
 
 
 function removeFromCart(productId) {
-  
     cart = cart.filter(item => item.id !== productId);
-
-   
     updateCartUI();
 }
 
 function updateCartUI() {
     const cartItemsElement = document.getElementById('cart-items');
+    const cartSubtotalElement = document.getElementById('cart-subtotal');
+    let subtotal = 0;
+
     cartItemsElement.innerHTML = '';
 
     cart.forEach(item => {
         const cartItem = document.createElement('div');
         cartItem.classList.add('cart-item');
         cartItem.innerHTML = `
-            <img src="products${item.immgUrl}" alt="${item.name}">
+            <img src="${item.imgUrl}" alt="${item.name}">
             <span>${item.name}</span>
             <div class="cart-item-details">
                 <div>
@@ -70,31 +70,35 @@ function updateCartUI() {
             <button onclick="removeFromCart(${item.id})">Remove</button>
         `;
         cartItemsElement.appendChild(cartItem);
+
+        subtotal += item.price * item.quantity;
     });
+
+    cartSubtotalElement.textContent = subtotal.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 }
 
 const cartButton = document.getElementById('cart-btn');
-
 const cartMenu = document.getElementById('cart');
 
 cartButton.addEventListener('click', () => {
     cartMenu.classList.toggle('active');
 });
 
-
 function addToCartAndOpenCart(productId) {
     addToCart(productId);
     openCart();
 }
+
 function openCart() {
-    const cartSection = document.getElementById('cart');
-    cartSection.style.display = 'block';
+    cartMenu.classList.add('active');
 }
-const closeCartButton = document.getElementById('close-cart-btn');
 
-closeCartButton.addEventListener('click', () => {
+function closeCart() {
     cartMenu.classList.remove('active');
-});
+}
 
-
+const closeCartButton = document.getElementById('close-cart-btn');
+closeCartButton.onclick = function() {
+    closeCart();
+};
 
