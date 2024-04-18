@@ -34,6 +34,21 @@ function addToCart(productId) {
     updateCartUI();
 }
 
+function incrementQuantity(productId) {
+    const item = cart.find(item => item.id === productId);
+    if (item) {
+        item.quantity++;
+        updateCartUI();
+    }
+}
+
+function decrementQuantity(productId) {
+    const item = cart.find(item => item.id === productId);
+    if (item && item.quantity > 1) {
+        item.quantity--;
+        updateCartUI();
+    }
+}
 
 function removeFromCart(productId) {
     cart = cart.filter(item => item.id !== productId);
@@ -55,8 +70,9 @@ function updateCartUI() {
             <span>${item.name}</span>
             <div class="cart-item-details">
                 <div>
-                    <span>Quantity:</span>
+                    <button onclick="decrementQuantity(${item.id})">-</button>
                     <span class="quantity">${item.quantity}</span>
+                    <button onclick="incrementQuantity(${item.id})">+</button>
                 </div>
                 <div>
                     <span>Price per item:</span>
@@ -101,4 +117,3 @@ const closeCartButton = document.getElementById('close-cart-btn');
 closeCartButton.onclick = function() {
     closeCart();
 };
-
