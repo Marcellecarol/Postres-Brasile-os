@@ -289,7 +289,7 @@ header .cart-items-container.active {
 .home {
   width: 100%;
   min-width: 100vh;
-  background-image: url("../fundo.jpg");
+  background-image: url("../img/fundo.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
